@@ -3,6 +3,9 @@ export interface Istate {
     route: string;
   };
   three: {
+    input: {
+      type: string;
+    };
     scene: Scene;
   };
 }

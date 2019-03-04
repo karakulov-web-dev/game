@@ -5,6 +5,9 @@ let state: Istate = {
     route: "/game"
   },
   three: {
+    input: {
+      type: "FlyControls"
+    },
     scene: {
       objectList: {
         id1: {

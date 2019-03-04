@@ -71,6 +71,8 @@ export class ThreeApp extends Component<Props> {
 
     this.clock = new THREE.Clock(true);
 
+    window['clock'] = this.clock
+
     this.scene.add(this.cameraPerspective);
 
     //// stars
