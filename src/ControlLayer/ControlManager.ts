@@ -67,6 +67,7 @@ class FlyControlsManualControl extends FlyControls implements Controls {
         this.object.quaternion,
         this.object.rotation.order
       );
+      this.updateMovementVector();
     };
 
     this.mousedown = function(event) {
