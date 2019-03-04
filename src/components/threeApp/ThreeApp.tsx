@@ -18,11 +18,6 @@ export class ThreeApp extends Component<Props> {
   private controls: ControlManager;
   private particles: THREE.Points;
   private renderer: THREE.WebGLRenderer;
-  private m: number;
-  private km: number;
-  private sec: number;
-  private min: number;
-  private hour: number;
   private sceneObjectManager: SceneObjectManager;
   constructor(props: Props) {
     super(props);
@@ -30,11 +25,6 @@ export class ThreeApp extends Component<Props> {
     this.SCREEN_WIDTH = window.innerWidth;
     this.SCREEN_HEIGHT = window.innerHeight;
     this.aspect = this.SCREEN_WIDTH / this.SCREEN_HEIGHT;
-    this.m = 1 / 10000;
-    this.km = 1000 * this.m;
-    this.sec = 1 / 10000;
-    this.min = this.sec * 60;
-    this.hour = this.min * 60;
   }
   render() {
     return <div className="threeApp" ref={this.myRef} />;
@@ -116,9 +106,9 @@ export class ThreeApp extends Component<Props> {
   }
 
   renderThreeApp() {
-    this.particles.position.x = this.cameraPerspective.position.x;
-    this.particles.position.y = this.cameraPerspective.position.y;
-    this.particles.position.z = this.cameraPerspective.position.z;
+    //this.particles.position.x = this.cameraPerspective.position.x;
+    //this.particles.position.y = this.cameraPerspective.position.y;
+    //this.particles.position.z = this.cameraPerspective.position.z;
 
     this.controls.update();
     this.renderer.clear();

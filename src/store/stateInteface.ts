@@ -8,6 +8,12 @@ export interface Istate {
     };
     scene: Scene;
   };
+  user: {
+    speed: {
+      movementSpeed: number;
+      rollSpeed: number;
+    };
+  };
 }
 export interface SceneObject {
   type: string;

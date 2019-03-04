@@ -29,7 +29,7 @@ var FlyControls = function(object, domElement, THREE) {
     left: 0,
     right: 0,
     forward: 0,
-    back: 1,
+    back: 0,
     pitchUp: 0,
     pitchDown: 0,
     yawLeft: 0,
