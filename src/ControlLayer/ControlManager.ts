@@ -11,6 +11,9 @@ interface Controls {
   rollSpeed: number;
   autoForward: boolean;
   dragToLook: boolean;
+  moveState: any;
+  mousedown(event: any): void;
+  domElement: any;
 }
 
 export class ControlManager {
@@ -26,19 +29,89 @@ export class ControlManager {
   }
 }
 
+//что то сделать ндо с этой лапшой ниже ,
+// вероятно интпут лайер на слое ui будет диспатчить все мутации
+// из кода ниже оставим привязку к редакс
+
 class FlyControlsManualControl extends FlyControls implements Controls {
   constructor(camera: THREE.PerspectiveCamera) {
     super(camera, undefined, THREE);
-    let { movementSpeed, rollSpeed } = this.speed;
+    let { movementSpeed, rollSpeed } = this.speedStore;
+    this.moveState = this.moveStateStore;
     this.movementSpeed = movementSpeed;
     this.rollSpeed = rollSpeed;
     this.autoForward = false;
     this.dragToLook = false;
+
+    this.update = function(delta) {
+      this.moveState = this.moveStateStore;
+      let { movementSpeed, rollSpeed } = this.speedStore;
+      this.movementSpeed = movementSpeed;
+      this.rollSpeed = rollSpeed;
+
+      var moveMult = delta * this.movementSpeed;
+      var rotMult = delta * this.rollSpeed;
+      this.object.translateX(this.moveVector.x * moveMult);
+      this.object.translateY(this.moveVector.y * moveMult);
+      this.object.translateZ(this.moveVector.z * moveMult);
+      this.tmpQuaternion
+        .set(
+          this.rotationVector.x * rotMult,
+          this.rotationVector.y * rotMult,
+          this.rotationVector.z * rotMult,
+          1
+        )
+        .normalize();
+      this.object.quaternion.multiply(this.tmpQuaternion);
+      this.object.rotation.setFromQuaternion(
+        this.object.quaternion,
+        this.object.rotation.order
+      );
+    };
+
+    this.mousedown = function(event) {
+      if (this.domElement !== document) {
+        this.domElement.focus();
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      if (this.dragToLook) {
+        this.mouseStatus++;
+      } else {
+        switch (event.button) {
+          case 0:
+            // attack
+            break;
+          case 2:
+            (() => {
+              if (store.getState().FlyControlsManualControl.speed.rollSpeed) {
+                store.getState().FlyControlsManualControl.speed.rollSpeed = 0;
+              } else {
+                store.getState().FlyControlsManualControl.speed.rollSpeed = 0.5;
+              }
+            })();
+            break;
+        }
+        this.updateMovementVector();
+      }
+    };
+
+    this.domElement.addEventListener(
+      "mousedown",
+      bind(this, this.mousedown),
+      false
+    );
   }
-  get speed() {
-    return store.getState().user.speed;
+  get speedStore() {
+    return store.getState().FlyControlsManualControl.speed;
   }
-  update(delta: number) {
-    super.update(delta);
+  get moveStateStore() {
+    return store.getState().FlyControlsManualControl.moveState;
   }
+}
+
+function bind(scope, fn) {
+  return function() {
+    fn.apply(scope, arguments);
+  };
 }

@@ -46,10 +46,24 @@ let state: Istate = {
       }
     }
   },
-  user: {
+  FlyControlsManualControl: {
     speed: {
-      movementSpeed: 0.009,
+      movementSpeed: 0.008,
       rollSpeed: 0.5
+    },
+    moveState: {
+      back: 0,
+      down: 0,
+      forward: 0,
+      left: 0,
+      pitchDown: 0,
+      pitchUp: 0,
+      right: 0,
+      rollLeft: 0,
+      rollRight: 0,
+      up: 0,
+      yawLeft: 0,
+      yawRight: 0
     }
   }
 };
