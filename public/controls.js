@@ -29,7 +29,7 @@ var FlyControls = function(object, domElement, THREE) {
     left: 0,
     right: 0,
     forward: 0,
-    back: 0,
+    back: 1,
     pitchUp: 0,
     pitchDown: 0,
     yawLeft: 0,
@@ -51,7 +51,6 @@ var FlyControls = function(object, domElement, THREE) {
       case 16:
         /* shift */ this.movementSpeedMultiplier = 0.1;
         break;
-
       case 87:
         /*W*/ this.moveState.forward = 1;
         break;

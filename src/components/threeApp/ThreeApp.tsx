@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import * as THREE from "three";
-import FirstPersonControls from "first-person-controls";
 import { SceneObjectManager } from "./ThreeEntities/SceneObjectsManager";
 import { ObjectList } from "../../store/stateInteface";
-
-declare const FlyControls: any;
+import { ControlManager } from "../../ControlLayer/ControlManager";
 
 export interface Props {
   sceneObjectList: ObjectList;
@@ -17,8 +15,7 @@ export class ThreeApp extends Component<Props> {
   private aspect: number;
   private scene: THREE.Scene;
   private cameraPerspective: THREE.PerspectiveCamera;
-  private clock: THREE.Clock;
-  private controls: any;
+  private controls: ControlManager;
   private particles: THREE.Points;
   private renderer: THREE.WebGLRenderer;
   private m: number;
@@ -59,21 +56,9 @@ export class ThreeApp extends Component<Props> {
     );
     this.cameraPerspective.rotation.y = Math.PI;
 
-    this.controls = new FlyControls(this.cameraPerspective, undefined, THREE);
-    window["control"] = this.controls; // development
-    console.log("delete");
-
-    console.log(this.controls);
-    this.controls.movementSpeed = 0.1 * this.km;
-    this.controls.rollSpeed = 0.5;
-    this.controls.autoForward = false;
-    this.controls.dragToLook = false;
-
-    this.clock = new THREE.Clock(true);
-
-    window['clock'] = this.clock
-
     this.scene.add(this.cameraPerspective);
+
+    this.controls = new ControlManager(this.cameraPerspective);
 
     //// stars
     var geometry = new THREE.BufferGeometry();
@@ -135,7 +120,7 @@ export class ThreeApp extends Component<Props> {
     this.particles.position.y = this.cameraPerspective.position.y;
     this.particles.position.z = this.cameraPerspective.position.z;
 
-    this.controls.update(this.clock.getDelta());
+    this.controls.update();
     this.renderer.clear();
 
     this.sceneObjectManager.update(this.props.sceneObjectList);
