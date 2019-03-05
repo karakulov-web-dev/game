@@ -29,9 +29,6 @@ export class ControlManager {
   }
 }
 
-//что то сделать ндо с этой лапшой ниже ,
-// вероятно интпут лайер на слое ui будет диспатчить все мутации
-// из кода ниже оставим привязку к редакс
 
 class FlyControlsManualControl extends FlyControls implements Controls {
   constructor(camera: THREE.PerspectiveCamera) {
