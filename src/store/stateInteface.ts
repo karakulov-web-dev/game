@@ -1,29 +1,30 @@
 export interface Istate {
   App: {
     route: string;
-  };
-  three: {
     input: {
       type: string;
     };
+  };
+  three: {
     scene: Scene;
   };
-  FlyControlsManualControl: {
+  FlyControls: {
+    manualControl: boolean;
     speed: {
       movementSpeed: number;
       rollSpeed: number;
     };
     moveState: {
-      back: number;
       down: number;
+      up: number;
       forward: number;
+      back: number;
       left: number;
+      right: number;
       pitchDown: number;
       pitchUp: number;
-      right: number;
       rollLeft: number;
       rollRight: number;
-      up: number;
       yawLeft: number;
       yawRight: number;
     };

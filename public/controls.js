@@ -302,7 +302,7 @@ var FlyControls = function(object, domElement, THREE) {
 
   this.domElement.addEventListener("contextmenu", contextmenu, false);
 
-  this.domElement.addEventListener("mousemove", _mousemove, false);
+  //this.domElement.addEventListener("mousemove", _mousemove, false);
   //this.domElement.addEventListener("mousedown", _mousedown, false);
   this.domElement.addEventListener("mouseup", _mouseup, false);
 

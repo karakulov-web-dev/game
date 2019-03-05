@@ -2,12 +2,12 @@ import { Istate } from "./stateInteface";
 
 let state: Istate = {
   App: {
-    route: "/game"
-  },
-  three: {
+    route: "/game",
     input: {
       type: "FlyControls"
-    },
+    }
+  },
+  three: {
     scene: {
       objectList: {
         id1: {
@@ -46,9 +46,10 @@ let state: Istate = {
       }
     }
   },
-  FlyControlsManualControl: {
+  FlyControls: {
+    manualControl: false,
     speed: {
-      movementSpeed: 0.008,
+      movementSpeed: 0.01,
       rollSpeed: 0.5
     },
     moveState: {

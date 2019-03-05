@@ -20,7 +20,7 @@ export class ControlManager {
   private clock: THREE.Clock;
   controls: Controls;
   constructor(private camera: THREE.PerspectiveCamera) {
-    this.controls = new FlyControlsManualControl(this.camera);
+    this.controls = new FlyControlsRedux(this.camera);
     window["control"] = this.controls; // development
     this.clock = new THREE.Clock(true);
   }
@@ -29,8 +29,7 @@ export class ControlManager {
   }
 }
 
-
-class FlyControlsManualControl extends FlyControls implements Controls {
+class FlyControlsRedux extends FlyControls implements Controls {
   constructor(camera: THREE.PerspectiveCamera) {
     super(camera, undefined, THREE);
     let { movementSpeed, rollSpeed } = this.speedStore;
@@ -65,51 +64,13 @@ class FlyControlsManualControl extends FlyControls implements Controls {
         this.object.rotation.order
       );
       this.updateMovementVector();
+      this.updateRotationVector();
     };
-
-    this.mousedown = function(event) {
-      if (this.domElement !== document) {
-        this.domElement.focus();
-      }
-      event.preventDefault();
-      event.stopPropagation();
-      if (this.dragToLook) {
-        this.mouseStatus++;
-      } else {
-        switch (event.button) {
-          case 0:
-            // attack
-            break;
-          case 2:
-            (() => {
-              if (store.getState().FlyControlsManualControl.speed.rollSpeed) {
-                store.getState().FlyControlsManualControl.speed.rollSpeed = 0;
-              } else {
-                store.getState().FlyControlsManualControl.speed.rollSpeed = 0.5;
-              }
-            })();
-            break;
-        }
-        this.updateMovementVector();
-      }
-    };
-
-    this.domElement.addEventListener(
-      "mousedown",
-      bind(this, this.mousedown),
-      false
-    );
   }
   get speedStore() {
-    return store.getState().FlyControlsManualControl.speed;
+    return store.getState().FlyControls.speed;
   }
   get moveStateStore() {
-    return store.getState().FlyControlsManualControl.moveState;
+    return store.getState().FlyControls.moveState;
   }
-}
-
-function bind(scope, fn) {
-  return function() {
-    fn.apply(scope, arguments);
-  };
 }

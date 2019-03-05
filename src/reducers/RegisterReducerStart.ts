@@ -19,6 +19,20 @@ function RegisterReducerStart() {
     delete three.scene.objectList[payload.id];
     return { ...state, three };
   });
+
+  registerReducer("switchManualControl", function(state) {
+    let { FlyControls } = state;
+    FlyControls.manualControl = FlyControls.manualControl ? false : true;
+    return { ...state, FlyControls };
+  });
+
+  registerReducer("FlyControlsMoveStateChange", function(state, action) {
+    let { payload } = action;
+    let { FlyControls } = state;
+    let { moveState } = FlyControls;
+    FlyControls.moveState = Object.assign(moveState, payload);
+    return { ...state, FlyControls };
+  });
 }
 
 export { RegisterReducerStart };
