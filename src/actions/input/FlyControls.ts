@@ -17,7 +17,7 @@ export function mouseDown(
         (() => {
           dispatch({ type: "switchManualControl" });
           dispatch(
-            MoveStateChange({
+            MoveStateSmoothChange({
               pitchDown: 0,
               pitchUp: 0,
               rollLeft: 0,
@@ -73,6 +73,7 @@ class MoveStateSmoothChanger {
   private targetMoveState: StateNumbers;
   private sendMoveState: StateNumbers;
   private processIsInProgress: boolean;
+  private processIntervalId: any;
   constructor(private dispatch, private getState: GetState) {
     if (MoveStateSmoothChanger.instance) {
       return MoveStateSmoothChanger.instance;
@@ -83,20 +84,41 @@ class MoveStateSmoothChanger {
     MoveStateSmoothChanger.instance = this;
   }
   changeMoveState(payload: StateNumbers) {
+    this.targetMoveState = Object.assign(this.targetMoveState, payload);
+    this.startProccess();
+  }
+  private startProccess() {
+    this.processIsInProgress = true;
+    clearTimeout(this.processIntervalId);
+    this.processIntervalId = setTimeout(() => {
+      this.iteration();
+    }, 1000);
+  }
+  private iteration() {
     let { moveState } = this.getState().FlyControls;
     this.sendMoveState = {};
-    this.targetMoveState = Object.assign(this.targetMoveState, payload);
     for (let key in this.targetMoveState) {
-      this.sendMoveState[key];
+      this.sendMoveState[key] = this.calcMoveStateItem(
+        this.targetMoveState[key],
+        moveState[key]
+      );
     }
+    console.log(this.sendMoveState);
+    this.dispatch(MoveStateChange(this.sendMoveState));
+  }
+  private calcMoveStateItem(target, current) {
+    console.log(current, " : " + target);
+    return 0.2;
   }
 }
 
 export function MoveStateSmoothChange(
-  payload: StateNumbers,
-  targetValue: number
+  payload: StateNumbers
 ): ThunkAction<void, Istate, any, any> {
-  return (dispatch, getState) => {};
+  return (dispatch, getState) => {
+    let changer = new MoveStateSmoothChanger(dispatch, getState);
+    changer.changeMoveState(payload);
+  };
 }
 
 function MoveStateChange(payload): AnyAction {
