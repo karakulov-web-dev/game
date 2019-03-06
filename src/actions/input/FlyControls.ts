@@ -58,7 +58,7 @@ export function keyDown(
         {
           dispatch(
             MoveStateSmoothChange({
-              forward: 0.01,
+              forward: 0,
               back: 0,
               left: 0,
               right: 0,
