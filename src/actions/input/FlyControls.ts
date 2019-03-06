@@ -54,6 +54,20 @@ export function keyDown(
 ): ThunkAction<void, Istate, any, any> {
   return (dispatch, getState) => {
     switch (event.keyCode) {
+      case 16:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              forward: 0.01,
+              back: 0,
+              left: 0,
+              right: 0,
+              up: 0,
+              down: 0
+            })
+          );
+        }
+        break;
       case 37:
         {
           dispatch(
@@ -212,7 +226,6 @@ export function keyUp(
   event: React.KeyboardEvent
 ): ThunkAction<void, Istate, any, any> {
   return (dispatch, getState) => {
-    console.log(event.keyCode);
     switch (event.keyCode) {
       case 81:
         {
