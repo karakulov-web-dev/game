@@ -3,7 +3,7 @@ import { InterfaceOverlay } from "../components/InterfaceOverlay/InterfaceOverla
 import { Istate } from "../store/stateInteface";
 import { PropsState } from "../components/InterfaceOverlay/InterfaceOverlay";
 import { PropsDispatch } from "../components/InterfaceOverlay/InterfaceOverlay";
-import { mouseDown, mouseMove } from "../actions/input/input";
+import { mouseDown, mouseMove, keyDown, keyUp } from "../actions/input/input";
 import { Action, AnyAction } from "redux";
 
 var mapState: MapStateToProps<PropsState, any, Istate> = function mapState(
@@ -21,7 +21,9 @@ const mapDispatchToProps: MapDispatchToProps<
 > = dispatch => {
   return {
     mouseDown: event => dispatch<any>(mouseDown(event)),
-    mouseMove: event => dispatch<any>(mouseMove(event))
+    mouseMove: event => dispatch<any>(mouseMove(event)),
+    keyDown: event => dispatch<any>(keyDown(event)),
+    keyUp: event => dispatch<any>(keyUp(event))
   };
 };
 

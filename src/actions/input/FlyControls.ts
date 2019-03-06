@@ -1,7 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { Istate } from "../../store/stateInteface";
 import { AnyAction } from "redux";
-import { SelfGuidedGenerator, GeneratorCreater } from "../../utilites";
 
 export function mouseDown(
   event: React.MouseEvent
@@ -50,19 +49,232 @@ export function mouseMove(
   };
 }
 
+export function keyDown(
+  event: React.KeyboardEvent
+): ThunkAction<void, Istate, any, any> {
+  return (dispatch, getState) => {
+    switch (event.keyCode) {
+      case 37:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              yawLeft: 1,
+              yawRight: 0
+            })
+          );
+        }
+        break;
+      case 39:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              yawLeft: 0,
+              yawRight: 1
+            })
+          );
+        }
+        break;
+      case 38:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              pitchUp: 1,
+              pitchDown: 0
+            })
+          );
+        }
+        break;
+      case 40:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              pitchUp: 0,
+              pitchDown: 1
+            })
+          );
+        }
+        break;
+      case 81:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              rollLeft: 1,
+              rollRight: 0
+            })
+          );
+        }
+        break;
+      case 69:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              rollLeft: 0,
+              rollRight: 1
+            })
+          );
+        }
+        break;
+      case 87:
+        {
+          let { forward } = getState().FlyControls.moveState;
+          forward = forward + 0.05;
+          if (forward > 1) {
+            forward = 1;
+          }
+          dispatch(
+            MoveStateSmoothChange({
+              forward: forward,
+              back: 0
+            })
+          );
+        }
+        break;
+      case 83:
+        {
+          let { back } = getState().FlyControls.moveState;
+          back = back + 0.05;
+          if (back > 1) {
+            back = 1;
+          }
+          dispatch(
+            MoveStateSmoothChange({
+              forward: 0,
+              back: back
+            })
+          );
+        }
+        break;
+      case 65:
+        {
+          let { left } = getState().FlyControls.moveState;
+          left = left + 0.05;
+          if (left > 1) {
+            left = 1;
+          }
+          dispatch(
+            MoveStateSmoothChange({
+              right: 0,
+              left: left
+            })
+          );
+        }
+        break;
+      case 68:
+        {
+          let { right } = getState().FlyControls.moveState;
+          right = right + 0.05;
+          if (right > 1) {
+            right = 1;
+          }
+          dispatch(
+            MoveStateSmoothChange({
+              right: right,
+              left: 0
+            })
+          );
+        }
+        break;
+      case 82:
+        {
+          let { up } = getState().FlyControls.moveState;
+          up = up + 0.05;
+          if (up > 1) {
+            up = 1;
+          }
+          dispatch(
+            MoveStateSmoothChange({
+              up: up,
+              down: 0
+            })
+          );
+        }
+        break;
+      case 70:
+        {
+          let { down } = getState().FlyControls.moveState;
+          down = down + 0.05;
+          if (down > 1) {
+            down = 1;
+          }
+          dispatch(
+            MoveStateSmoothChange({
+              down: down,
+              up: 0
+            })
+          );
+        }
+        break;
+    }
+  };
+}
+
+export function keyUp(
+  event: React.KeyboardEvent
+): ThunkAction<void, Istate, any, any> {
+  return (dispatch, getState) => {
+    console.log(event.keyCode);
+    switch (event.keyCode) {
+      case 81:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              rollLeft: 0
+            })
+          );
+        }
+        break;
+      case 69:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              rollRight: 0
+            })
+          );
+        }
+        break;
+      case 38:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              pitchUp: 0
+            })
+          );
+        }
+        break;
+      case 40:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              pitchDown: 0
+            })
+          );
+        }
+        break;
+      case 37:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              yawLeft: 0
+            })
+          );
+        }
+        break;
+      case 39:
+        {
+          dispatch(
+            MoveStateSmoothChange({
+              yawRight: 0
+            })
+          );
+        }
+        break;
+    }
+  };
+}
+
 interface StateNumbers {
   [key: string]: number;
 }
-
-let moveStateSmooth_generator = new SelfGuidedGenerator(
-  function* MoveStateSmooth_generator(self) {
-    yield;
-    while (true) {
-      console.log("yeld");
-      yield;
-    }
-  }
-);
 
 interface GetState {
   (): Istate;
@@ -89,10 +301,10 @@ class MoveStateSmoothChanger {
   }
   private startProccess() {
     this.processIsInProgress = true;
-    clearTimeout(this.processIntervalId);
-    this.processIntervalId = setTimeout(() => {
+    clearInterval(this.processIntervalId);
+    this.processIntervalId = setInterval(() => {
       this.iteration();
-    }, 1000);
+    }, 17);
   }
   private iteration() {
     let { moveState } = this.getState().FlyControls;
@@ -102,13 +314,25 @@ class MoveStateSmoothChanger {
         this.targetMoveState[key],
         moveState[key]
       );
+      if (this.targetMoveState[key] === this.sendMoveState[key]) {
+        delete this.targetMoveState[key];
+      }
+      if (Object.keys(this.targetMoveState).length === 0) {
+        clearInterval(this.processIntervalId);
+      }
     }
-    console.log(this.sendMoveState);
     this.dispatch(MoveStateChange(this.sendMoveState));
   }
   private calcMoveStateItem(target, current) {
-    console.log(current, " : " + target);
-    return 0.2;
+    var dif = target - current;
+    if (Math.abs(dif) < 0.01) {
+      return target;
+    }
+    if (dif > 0) {
+      return current + 0.01;
+    } else {
+      return current - 0.01;
+    }
   }
 }
 

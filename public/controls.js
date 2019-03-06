@@ -86,12 +86,10 @@ var FlyControls = function(object, domElement, THREE) {
         /*right*/ this.moveState.yawRight = 1;
         break;
 
-      case 81:
-        /*Q*/ this.moveState.rollLeft = 1;
-        break;
-      case 69:
-        /*E*/ this.moveState.rollRight = 1;
-        break;
+      case 81: //this.moveState.rollLeft = 1;
+        /*Q*/ break;
+      case 69: //this.moveState.rollRight = 1;
+        /*E*/ break;
     }
 
     this.updateMovementVector();
@@ -139,12 +137,10 @@ var FlyControls = function(object, domElement, THREE) {
         /*right*/ this.moveState.yawRight = 0;
         break;
 
-      case 81:
-        /*Q*/ this.moveState.rollLeft = 0;
-        break;
-      case 69:
-        /*E*/ this.moveState.rollRight = 0;
-        break;
+      case 81: //this.moveState.rollLeft = 0;
+        /*Q*/ break;
+      case 69: // this.moveState.rollRight = 0;
+        /*E*/ break;
     }
 
     this.updateMovementVector();
@@ -240,10 +236,7 @@ var FlyControls = function(object, domElement, THREE) {
   };
 
   this.updateMovementVector = function() {
-    var forward =
-      this.moveState.forward || (this.autoForward && !this.moveState.back)
-        ? 1
-        : 0;
+    var forward = this.moveState.forward;
 
     this.moveVector.x = -this.moveState.left + this.moveState.right;
     this.moveVector.y = -this.moveState.down + this.moveState.up;
@@ -304,10 +297,10 @@ var FlyControls = function(object, domElement, THREE) {
 
   //this.domElement.addEventListener("mousemove", _mousemove, false);
   //this.domElement.addEventListener("mousedown", _mousedown, false);
-  this.domElement.addEventListener("mouseup", _mouseup, false);
+  //this.domElement.addEventListener("mouseup", _mouseup, false);
 
-  window.addEventListener("keydown", _keydown, false);
-  window.addEventListener("keyup", _keyup, false);
+  //window.addEventListener("keydown", _keydown, false);
+  //window.addEventListener("keyup", _keyup, false);
 
   this.updateMovementVector();
   this.updateRotationVector();
